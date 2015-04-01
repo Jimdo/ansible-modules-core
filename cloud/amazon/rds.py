@@ -453,6 +453,9 @@ class RDS2Connection:
             raise RDSException(e)
 
     def modify_db_instance(self, instance_name, **params):
+        # We need a list of ids and not instances
+        vpc_security_groups = params.pop('vpc_security_groups', [])
+        vpc_security_group_ids = [g.vpc_group for g in vpc_security_groups]
         try:
             result = self.connection.modify_db_instance(instance_name, **params)['ModifyDBInstanceResponse']['ModifyDBInstanceResult']['DBInstance']
             return RDS2DBInstance(result)
