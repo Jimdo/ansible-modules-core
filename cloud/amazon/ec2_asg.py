@@ -445,10 +445,7 @@ def delete_autoscaling_group(connection, module):
     groups = connection.get_all_groups(names=[group_name])
     if groups:
         group = groups[0]
-        group.max_size = 0
-        group.min_size = 0
-        group.desired_capacity = 0
-        group.update()
+        group.shutdown_instances()
 
         while True:
             try:
