@@ -449,14 +449,6 @@ def delete_autoscaling_group(connection, module):
         group.min_size = 0
         group.desired_capacity = 0
         group.update()
-        instances = True
-        while instances:
-            tmp_groups = connection.get_all_groups(names=[group_name])
-            if tmp_groups:
-                tmp_group = tmp_groups[0]
-                if not tmp_group.instances:
-                   instances = False
-            time.sleep(10)
 
         while True:
             try:
