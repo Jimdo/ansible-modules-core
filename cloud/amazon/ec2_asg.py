@@ -458,7 +458,16 @@ def delete_autoscaling_group(connection, module):
                    instances = False
             time.sleep(10)
 
-        group.delete()
+        while True:
+            try:
+                group.delete()
+                break
+            except BotoServerError, e:
+                if e.error_code == 'ScalingActivityInProgress' or e.error_code == 'ResourceInUse':
+                    time.sleep(10)
+                else:
+                    raise e
+
         while len(connection.get_all_groups(names=[group_name])):
             time.sleep(5)
         changed=True
