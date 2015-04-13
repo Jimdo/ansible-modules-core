@@ -67,7 +67,7 @@ options:
       - Number of instances you'd like to replace at a time.  Used with replace_all_instances.
     required: false
     version_added: "1.8"
-    default: 1  
+    default: 1
   replace_instances:
     description:
       - List of instance_ids belonging to the named ASG that you would like to terminate and be replaced with instances matching the current launch configuration.
@@ -141,9 +141,9 @@ EXAMPLES = '''
 
 # Rolling ASG Updates
 
-Below is an example of how to assign a new launch config to an ASG and terminate old instances.  
+Below is an example of how to assign a new launch config to an ASG and terminate old instances.
 
-All instances in "myasg" that do not have the launch configuration named "my_new_lc" will be terminated in 
+All instances in "myasg" that do not have the launch configuration named "my_new_lc" will be terminated in
 a rolling fashion with instances using the current launch configuration, "my_new_lc".
 
 This could also be considered a rolling deploy of a pre-baked AMI.
@@ -494,7 +494,7 @@ def replace(connection, module):
     if replaceable == 0:
         changed = False
         return(changed, props)
-        
+
     # set temporary settings and wait for them to be reached
     as_group = connection.get_all_groups(names=[group_name])[0]
     as_group.max_size = max_size + batch_size
@@ -514,8 +514,8 @@ def replace(connection, module):
         wait_for_elb(connection, module, group_name)
         as_group = connection.get_all_groups(names=[group_name])[0]
     # return settings to normal
-    as_group.max_size = max_size 
-    as_group.min_size = min_size 
+    as_group.max_size = max_size
+    as_group.min_size = min_size
     as_group.desired_capacity = desired_capacity
     as_group.update()
     as_group = connection.get_all_groups(names=[group_name])[0]
@@ -546,7 +546,7 @@ def terminate_batch(connection, module, replace_instances):
     # set all instances given to unhealthy
     for instance_id in old_instances:
         connection.set_instance_health(instance_id,'Unhealthy')
-    
+
     # we wait to make sure the machines we marked as Unhealthy are
     # no longer in the list
 
@@ -609,9 +609,9 @@ def main():
             wait_for_instances=dict(type='bool', default=True)
         ),
     )
-    
+
     module = AnsibleModule(
-        argument_spec=argument_spec, 
+        argument_spec=argument_spec,
         mutually_exclusive = [['replace_all_instances', 'replace_instances']]
     )
 
